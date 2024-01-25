@@ -1,0 +1,49 @@
+ports:
+  - protocol: "HTTPS"
+    targetProtocol: "HTTP"
+    listeningPort: "443"
+    targetPort: "8201"
+    public: true
+    path: "/"
+    isAuth: false
+  - protocol: "HTTPS"
+    targetProtocol: "HTTP"
+    listeningPort: "8126"
+    targetPort: "39553"
+    public: true
+    path: "/"
+    isAuth: true
+    login: "root"
+    password: "random_password"
+    loginTitle: "PHP My Admin"
+environments:
+  - key: "ADMIN_PASSWORD"
+    value: "random_password"
+  - key: "DATABASE_USERNAME"
+    value: "yii"
+  - key: "DATABASE_PASSWORD"
+    value: "random_password"
+  - key: "DATABASE_NAME"
+    value: "yii"
+config:
+  runTime: "dockerCompose"
+  version: ""
+  framework: ""
+  buildCommand: "docker-compose build"
+  buildDir: "./"
+  runCommand: "docker-compose up -d"
+  icon: ""
+  screenshot: "yii.png"
+
+lifeCycleConfig:
+  preInstallCommand: "./scripts/preInstall.sh"
+  postInstallCommand: "./scripts/postInstall.sh"
+  preBackupCommand: "./scripts/preBackup.sh"
+  postBackupCommand: "./scripts/postBackup.sh"
+  preRestoreCommand: "./scripts/preRestore.sh"
+  postRestoreCommand: "./scripts/postRestore.sh"
+  preDeployCommand: "./scripts/preDeploy.sh"
+  postDeployCommand: "./scripts/postDeploy.sh"
+webUI:
+  - url: "https://[CI_CD_DOMAIN]"
+    label: "Website"

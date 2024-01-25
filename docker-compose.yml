@@ -1,0 +1,43 @@
+version: "2"
+services:
+  php:
+    image: yiisoftware/yii2-php:8.3-fpm-nginx
+    volumes:
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./basic/:/app:delegated
+    ports:
+      - "172.17.0.1:8201:80"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: elestio/mysql:8.0
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_USER=${DATABASE_USERNAME}
+      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_DATABASE=${DATABASE_NAME}
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - "172.17.0.1:3788:3306"
+
+  pma:
+    image: elestio/phpmyadmin
+    restart: always
+    links:
+      - mysql:mysql
+    ports:
+      - "172.17.0.1:39553:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ${DATABASE_PASSWORD}
+      UPLOAD_LIMIT: 500M
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    depends_on:
+      - mysql
