@@ -12,10 +12,10 @@ class GetVisiblePixelsAction extends BaseAction
 {
     public function run()
     {
-        $sql = "SELECT * FROM image LEFT JOIN image_user ON image.id = image_user.image_id WHERE image_user.image_id IS NOT NULL";
+        $sql = "SELECT image.id FROM image LEFT JOIN image_user ON image.id = image_user.image_id WHERE image_user.image_id IS NOT NULL";
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand($sql);
-        $result = $command->execute();
+        $result = $command->queryAll();
 
         return [
             'visiblePixels' => $result,
