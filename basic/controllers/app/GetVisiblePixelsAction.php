@@ -4,10 +4,11 @@ namespace app\controllers\app;
 
 use yii\base\Action;
 use yii\helpers\ArrayHelper;
+use app\controllers\BaseAction;
 
 use Yii;
 
-class GetVisiblePixelsAction extends Action
+class GetVisiblePixelsAction extends BaseAction
 {
     public function run()
     {

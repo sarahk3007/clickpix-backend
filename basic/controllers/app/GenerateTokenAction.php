@@ -4,10 +4,11 @@ namespace app\contollers\app;
 
 use yii\base\Action;
 use yii\helpers\ArrayHelper;
+use app\controllers\BaseAction;
 
 use Yii;
 
-class GenerateTokenAction extends Action
+class GenerateTokenAction extends BaseAction
 {
     public function run()
     {

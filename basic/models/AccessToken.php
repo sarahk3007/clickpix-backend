@@ -114,4 +114,5 @@ class AccessToken extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+    }
 }

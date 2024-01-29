@@ -20,7 +20,7 @@ class BaseAppController extends Controller
     /**
      * @inheritdoc
      */
-    protected $authExceptActions = ['login','forgot','logout','options'];
+    protected $authExceptActions = [];
 
 
     /**
