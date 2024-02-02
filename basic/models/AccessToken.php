@@ -73,10 +73,13 @@ class AccessToken extends \yii\db\ActiveRecord
      * @param int $validHours
      * @return string|FALSE
      */
-    public static function create(int $validHours = 72)
+    public static function create(int $validHours = 72, $type = 'bearer_token')
     {
-        $token = Yii::$app->getSecurity()->generateRandomString();
-
+        if ($type == 'bearer_token')
+            $token = Yii::$app->getSecurity()->generateRandomString();
+        else {
+            $token = rand(100000, 999999);
+        }
         $model = new static();
 
         $model->attributes = [
@@ -84,6 +87,7 @@ class AccessToken extends \yii\db\ActiveRecord
             'issued_date' => (new \DateTime())->format('Y-m-d H:i:s'),
             'valid_until' => (new \DateTime())->setTimestamp(strtotime("+{$validHours} hours"))->format('Y-m-d H:i:s'),
             'token' => $token,
+            'used' => $type == 'bearer_token' ? 1 : 0,
             'issue_ip' => Yii::$app->request->userIP ?? getHostByName(getHostName()),
         ];
 
@@ -106,7 +110,7 @@ class AccessToken extends \yii\db\ActiveRecord
      */
     public static function markAsUsed(string $token): bool
     {
-        if ($model = static::findOne(['token' => $token])) {
+        if ($model = static::findOne(['token' => $token, 'type' => 'sms_token'])) {
             $model->used = 1;
             $model->used_date = (new \DateTime())->format('Y-m-d H:i:s');
             $model->used_ip = Yii::$app->request->userIP;
@@ -114,5 +118,29 @@ class AccessToken extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+    }
+
+    /**
+     * Validate an access token
+     *
+     * @param string $token
+     * @param string $type
+     * @return bool
+     */
+    public static function validateToken(string $token, string $type): bool
+    {
+        $success = false;
+
+        if ($model = static::findOne(['token' => $token, 'type' => $type , 'used' => 0])) {
+            if(time() > strtotime($model->valid_until)) {
+                Yii::error("Access token {$token} for user {$userId} expired on {$model->valid_until}!");
+            } else {
+                $success = true;
+            }
+        } else {
+            Yii::error("Access token {$token} of type {$type} not found for user {$userId}");
+        }
+
+        return $success;
     }
 }

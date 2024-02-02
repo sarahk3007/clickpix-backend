@@ -24,7 +24,10 @@ class AppController extends BaseAppController
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'generate-token' => ['GET'],
-                    'get-visible-pixels' => ['GET']
+                    'get-visible-pixels' => ['GET'],
+                    'get-random-ids' => ['POST'],
+                    'send-user=sms' -> ['POST'],
+                    'verify-token' => ['POST']
                 ],
             ],
         ]);
@@ -38,6 +41,10 @@ class AppController extends BaseAppController
         return [
             'generate-token' => 'app\controllers\app\GenerateTokenAction',
             'get-visible-pixels' => 'app\controllers\app\GetVisiblePixelsAction',
+            'get-random-ids' => 'app\controllers\app\GetRandomIdsAction',
+            'send-user-sms' => 'app\controllers\app\SendUserSmsAction',
+            'verify-token' => 'app\controllers\app\VerifyTokenAction',
+            'create-payment-link' => 'app\controllers\app\CreatePaymentLinkAction',
         ];
     }
 }
