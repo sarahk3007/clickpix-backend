@@ -26,7 +26,7 @@ class AppController extends BaseAppController
                     'generate-token' => ['GET'],
                     'get-visible-pixels' => ['GET'],
                     'get-random-ids' => ['POST'],
-                    'send-user-sms' -> ['POST'],
+                    'send-user-sms' => ['POST'],
                     'verify-token' => ['POST']
                 ],
             ],
