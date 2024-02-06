@@ -78,7 +78,7 @@ class AccessToken extends \yii\db\ActiveRecord
         if ($type == 'bearer_token')
             $token = Yii::$app->getSecurity()->generateRandomString();
         else {
-            $token = rand(100000, 999999);
+            $token = strval(rand(100000, 999999));
         }
         $model = new static();
 
