@@ -13,7 +13,7 @@ class GetRandomIdsAction extends BaseAction
     public function run()
     {
         ini_set('memory_limit','2G');
-        $postData =  Yii::$app->request->bodyParams;
+        $postData = $this->controller->requestData;
         if (!$postData['num']) {
             Yii::$app->response->statusCode = 400;
             return [

@@ -14,7 +14,7 @@ class SendUserSmsAction extends BaseAction
 {
     public function run()
     {
-        $postData =  Yii::$app->request->bodyParams;
+        $postData = $this->controller->requestData;
         if (!$postData['phone']) {
             Yii::$app->response->statusCode = 400;
             return [

@@ -14,7 +14,7 @@ class CreatePaymentLinkAction extends BaseAction
     public function run()
     {
         $success = false;
-        $postData =  Yii::$app->request->bodyParams;
+        $postData = $this->controller->requestData;
         if (!$postData['ids']) {
             Yii::$app->response->statusCode = 400;
             return [

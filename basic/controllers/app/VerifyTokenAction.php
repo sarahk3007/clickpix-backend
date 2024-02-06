@@ -14,7 +14,7 @@ class VerifyTokenAction extends BaseAction
     public function run()
     {
         $success = false;
-        $postData =  Yii::$app->request->bodyParams;
+        $postData = $this->controller->requestData;
         if (!$postData['phone'] || !$postData['code']) {
             Yii::$app->response->statusCode = 400;
             return [
