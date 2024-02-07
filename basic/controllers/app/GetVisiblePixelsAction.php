@@ -12,9 +12,8 @@ class GetVisiblePixelsAction extends BaseAction
 {
     public function run()
     {
-
         ini_set('memory_limit','5G');
-        $sql = "SELECT image.id, image.available, image.flag FROM image LEFT JOIN image_user ON image.id = image_user.image_id WHERE image_user.image_id IS NULL";
+        $sql = "SELECT image.id, image.available, image.flag FROM image LEFT JOIN image_user ON image.id = image_user.image_id WHERE image_user.image_id IS NOT NULL";
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand($sql);
         $result = $command->queryAll();
@@ -27,7 +26,7 @@ class GetVisiblePixelsAction extends BaseAction
 
         return [
             'visiblePixels' => $result,
-            'notVisiblePixels' => $notVisibleArray,
+            'notVisibleNotAvailable' => $notVisibleArray,
         ];
     }
 }
