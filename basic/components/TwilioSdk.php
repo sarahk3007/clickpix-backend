@@ -21,6 +21,13 @@ class TwilioSdk
             "body" => $message_text
             ]
         );
+        Yii::info('recipients : ' . print_r($recepients, true), 'sms');
+        Yii::info('Request Data ' . print_r([
+            "from" => $from,
+            "body" => $message_text
+            ], true), 'sms');
+        Yii::error('Response ' . print_r($message, true), 'sms');
+        return $message;
         
     }
 }
