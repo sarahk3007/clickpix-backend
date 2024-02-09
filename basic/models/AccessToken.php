@@ -83,7 +83,7 @@ class AccessToken extends \yii\db\ActiveRecord
         $model = new static();
 
         $model->attributes = [
-            'type' => 'bearer_token',
+            'type' => $type,
             'issued_date' => (new \DateTime())->format('Y-m-d H:i:s'),
             'valid_until' => (new \DateTime())->setTimestamp(strtotime("+{$validHours} hours"))->format('Y-m-d H:i:s'),
             'token' => $token,
