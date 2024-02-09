@@ -27,5 +27,7 @@ class SendUserSmsAction extends BaseAction
         $twilio = new TwilioSdk;
         $res = $twilio->SendSMS($msg, $postData['phone']);
 
+        return $res;
+
     }
 }
