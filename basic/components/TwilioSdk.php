@@ -13,11 +13,12 @@ class TwilioSdk
     {
         $sid = Yii::$app->params['twilio']['sid'];
         $token = Yii::$app->params['twilio']['token'];
+        $from = Yii::$app->params['twilio']['from'];
 
         $url = "https://api.twilio.com/2010-04-01/Accounts/$sid/Messages.json";
         $params = [
             'To' => $recepients,
-            'From' => "+15017122661",
+            'From' => $from,
             'Body' => $message_text
         ];
 
