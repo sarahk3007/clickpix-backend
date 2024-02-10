@@ -15,13 +15,20 @@ class CreatePaymentLinkAction extends BaseAction
     {
         $success = false;
         $postData = $this->controller->requestData;
-        if (!$postData['ids']) {
+        if (!$postData['ids'] || ($postData['ids'] && !is_array($postData['ids']))) {
             Yii::$app->response->statusCode = 400;
             return [
-                'error_message' => 'You have to enter a valid phone and code'
+                'error_message' => 'You have to enter a price'
             ];
         }
-        //TODO create payment url
+        $countPixels = count($postData['ids']);
+        $price = 1 * $countPixels;
+        $stripe = new StripeSdk;
+        $res = $stripe->createLink($price);
+        if ($res->url) {
+            $url = $res->url;
+        }
+
         $ids = implode(",", $postData['ids']);
         $sql = "UPDATE `image` SET paid = true, available = false WHERE id IN (" . $ids . ")";
         $command = $connection->createCommand($sql);

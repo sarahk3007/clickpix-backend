@@ -130,15 +130,15 @@ class AccessToken extends \yii\db\ActiveRecord
     public static function validateToken(string $token, string $type): bool
     {
         $success = false;
-
+        
         if ($model = static::findOne(['token' => $token, 'type' => $type , 'used' => 0])) {
             if(time() > strtotime($model->valid_until)) {
-                Yii::error("Access token {$token} for user {$userId} expired on {$model->valid_until}!");
+                Yii::error("Access token {$token} expired on {$model->valid_until}!");
             } else {
                 $success = true;
             }
         } else {
-            Yii::error("Access token {$token} of type {$type} not found for user {$userId}");
+            Yii::error("Access token {$token} of type {$type} not found for user");
         }
 
         return $success;

@@ -12,13 +12,24 @@ class TwilioSdk
         $sid = Yii::$app->params['twilio']['sid'];
         $token = Yii::$app->params['twilio']['token'];
         $from = Yii::$app->params['twilio']['from'];
+        $messageServiceId = Yii::$app->params['twilio']['messageServiceId'];
         $twilio = new Client($sid, $token);
+
+        // $campaign = $twilio->messaging->v1->services($messageServiceId)
+        //     ->a2p->v1->alphaSender->create([
+        //         'sender_id' => $messageServiceId,
+        //         'country_code' => 'US',
+        //         'type' => 'marketing'
+        //     ]);
+        // print_r($campaign->sid);die;
 
         $message = $twilio->messages
         ->create($recepients, // to
             [
             "from" => $from,
-            "body" => $message_text
+            "body" => $message_text,
+            //"messagingServiceSid" => $messageServiceId,
+            // 'applicationSid' => 'IDDApplication'
             ]
         );
         Yii::info('recipients : ' . print_r($recepients, true), 'sms');

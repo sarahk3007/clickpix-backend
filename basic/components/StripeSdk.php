@@ -7,30 +7,34 @@ use yii\httpclient\Client;
 
 class TwilioSdk
 {
-    public function CreateLink($price) 
-    {
-        $token = Yii::$app->params['stripe']['token'];
-        $stripe = new \Stripe\StripeClient($token);
-        
-        $stripe->prices->create([
-            'product' => 'pixels',
-            'unit_amount' => $price,
-            'currency' => 'usd',
-        ]);
+  public function CreateLink($price) 
+  {
+      $token = Yii::$app->params['stripe']['token'];
+      $secretKey = Yii::$app->params['stripe']['secretKey'];
 
-        //return the price id
-        $checkout_session = $stripe->checkout->sessions->create([
-            'ui_mode' => 'embedded',
+      $stripe = new \Stripe\StripeClient($secretKey);
+      try {
+        $paymentLink = $stripe->checkout->sessions->create([
+            'payment_method_types' => ['card'],
             'line_items' => [[
-              # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-              'price' => '{{PRICE_ID}}',//from prices create
-              'quantity' => 1,
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => 'pixels',
+                    ],
+                    'unit_amount' => $price, // Amount in cents
+                ],
+                'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'return_url' => '',//TODO
-            'automatic_tax' => [
-              'enabled' => false,
-            ],
+            'success_url' => 'https://clickpix-backend-u11765.vm.elestio.app/success.html',
+            'cancel_url' => 'https://clickpix-backend-u11765.vm.elestio.app/cancel.html',
         ]);
-    }
+
+        return $paymentLink;
+  
+      } catch (\Stripe\Exception\ApiErrorException $e) {
+          echo 'Error: ' . $e->getMessage();
+      }
+  }
 }
