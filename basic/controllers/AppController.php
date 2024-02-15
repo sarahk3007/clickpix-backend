@@ -28,7 +28,8 @@ class AppController extends BaseAppController
                     'get-random-ids' => ['POST'],
                     'send-user-sms' => ['POST'],
                     'verify-token' => ['POST'],
-                    'create-payment-link' => ['POST']
+                    'create-payment-link' => ['POST'],
+                    'block-pixels' => ['POST']
                 ],
             ],
         ]);
@@ -46,6 +47,7 @@ class AppController extends BaseAppController
             'send-user-sms' => 'app\controllers\app\SendUserSmsAction',
             'verify-token' => 'app\controllers\app\VerifyTokenAction',
             'create-payment-link' => 'app\controllers\app\CreatePaymentLinkAction',
+            'block-pixels' => 'app\controllers\app\BlockPixelsAction',
         ];
     }
 }

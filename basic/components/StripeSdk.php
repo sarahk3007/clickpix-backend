@@ -5,7 +5,7 @@ namespace app\components;
 use Yii;
 use yii\httpclient\Client;
 
-class TwilioSdk
+class StripeSdk
 {
   public function CreateLink($price) 
   {

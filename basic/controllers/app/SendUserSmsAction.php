@@ -16,7 +16,7 @@ class SendUserSmsAction extends BaseAction
     {
         $postData = $this->controller->requestData;
         $success = false;
-        if (!$postData['phone']) {
+        if (!isset($postData['phone'])) {
             Yii::$app->response->statusCode = 400;
             return [
                 'error_message' => 'You have to enter a valid phone'
@@ -25,6 +25,11 @@ class SendUserSmsAction extends BaseAction
 
         $token = AccessToken::create(1, 'sms_token');
         $msg = 'Your Click&Pix verification code is: ' . $token;
+        // $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/test'],['content'=>$msg])
+        //     ->setFrom(['noreply@clickandpix.com' => 'Click and Pix system'])
+        //     ->setTo(["rebeceva@gmail.com"])
+        //     ->setSubject('test');
+
         $twilio = new TwilioSdk;
         $res = $twilio->SendSMS($msg, $postData['phone']);
 

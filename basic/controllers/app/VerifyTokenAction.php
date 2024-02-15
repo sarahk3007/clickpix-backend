@@ -15,7 +15,7 @@ class VerifyTokenAction extends BaseAction
     {
         $success = false;
         $postData = $this->controller->requestData;
-        if (!$postData['phone'] || !$postData['code']) {
+        if (!isset($postData['phone']) || !isset($postData['code'])) {
             Yii::$app->response->statusCode = 400;
             return [
                 'error_message' => 'You have to enter a valid phone and code'

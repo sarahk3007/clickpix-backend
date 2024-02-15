@@ -14,7 +14,7 @@ class GetRandomIdsAction extends BaseAction
     {
         ini_set('memory_limit','2G');
         $postData = $this->controller->requestData;
-        if (!$postData['num']) {
+        if (!isset($postData['num'])) {
             Yii::$app->response->statusCode = 400;
             return [
                 'error_message' => 'You have to enter a number of pixels'

@@ -6,38 +6,29 @@ use yii\base\Action;
 use yii\helpers\ArrayHelper;
 use app\controllers\app\BaseAction;
 use app\models\AccessToken;
-use app\components\StripeSdk;
 
 use Yii;
 
-class CreatePaymentLinkAction extends BaseAction
+class BlockPixelsAction extends BaseAction
 {
     public function run()
     {
         $success = false;
         $postData = $this->controller->requestData;
-        if (!isset($postData['ids']) || (isset($postData['ids']) && !is_array($postData['ids']))) {
+        if (!isset($postData['ids'])) {
             Yii::$app->response->statusCode = 400;
             return [
-                'error_message' => 'You have to enter a price'
+                'error_message' => 'You have to enter an array of ids'
             ];
         }
-        $countPixels = count($postData['ids']);
-        $price = 100 * $countPixels;
-        $stripe = new StripeSdk;
-        
-        $res = $stripe->createLink($price);
-        if ($res->url) {
-            $url = $res->url;
-        }
-
         $ids = implode(",", $postData['ids']);
-        $sql = "UPDATE `image` SET paid = true WHERE id IN (" . $ids . ")";
+
         $connection = Yii::$app->getDb();
+        $sql = "UPDATE `image` SET available = false WHERE id IN (" . $ids . ")";
         $command = $connection->createCommand($sql);
         $result = $command->execute();
         if ($result) {
-            return $url;
+            return true;
         } else {
             Yii::$app->response->statusCode = 400;
             return [
