@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use app\components\TwilioSdk;
 use app\controllers\app\BaseAction;
 use app\models\AccessToken;
+use Twilio\Exceptions\RestException;
 
 use Yii;
 
@@ -32,14 +33,15 @@ class SendUserSmsAction extends BaseAction
         //     ->setSubject('test');
 
         $twilio = new TwilioSdk;
-        $res = $twilio->SendSMS($msg, $postData['phone']);
-
-        if ($res->id) {
+        try {
+            $response = $twilio->SendSMS($msg, $postData['phone']);
             $success = true;
-            return $res->id;
+            return ['data' => $success];
+        } catch (\Throwable $error) {
+            Yii::$app->response->statusCode = 400;
+            return [
+                'error_message' => 'The message could not be sent'
+            ];
         }
-
-        return 'The message could not be sent';
-
     }
 }
