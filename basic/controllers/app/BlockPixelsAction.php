@@ -24,7 +24,7 @@ class BlockPixelsAction extends BaseAction
         $ids = implode(",", $postData['ids']);
 
         $connection = Yii::$app->getDb();
-        $sql = "UPDATE `image` SET available = false WHERE id IN (" . $ids . ")";
+        $sql = "UPDATE `image` SET available = 0 WHERE id IN (" . $ids . ")";
         $command = $connection->createCommand($sql);
         $result = $command->execute();
         if ($result) {

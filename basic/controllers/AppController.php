@@ -11,7 +11,7 @@ class AppController extends BaseAppController
     /**
      * @inheritdoc
      */
-    protected $authExceptActions = ['generate-token'];
+    protected $authExceptActions = ['generate-token', 'payment-success', 'payment-cancel'];
 
 
     /**
@@ -29,7 +29,9 @@ class AppController extends BaseAppController
                     'send-user-sms' => ['POST'],
                     'verify-token' => ['POST'],
                     'create-payment-link' => ['POST'],
-                    'block-pixels' => ['POST']
+                    'block-pixels' => ['POST'],
+                    'payment-success' => ['GET'],
+                    'payment-cancel' => ['GET']
                 ],
             ],
         ]);
@@ -48,6 +50,8 @@ class AppController extends BaseAppController
             'verify-token' => 'app\controllers\app\VerifyTokenAction',
             'create-payment-link' => 'app\controllers\app\CreatePaymentLinkAction',
             'block-pixels' => 'app\controllers\app\BlockPixelsAction',
+            'payment-success' => 'app\controllers\app\PaymentSuccessAction',
+            'payment-cancel' => 'app\controllers\app\PaymentCancelAction',
         ];
     }
 }
