@@ -31,7 +31,8 @@ class VerifyTokenAction extends BaseAction
         }
 
         return [
-            'data' => $success
+            'data' => $success,
+            'ids' => $postData['ids'] ?? []
         ];
     }
 }

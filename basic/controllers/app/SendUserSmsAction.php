@@ -36,7 +36,8 @@ class SendUserSmsAction extends BaseAction
         try {
             $response = $twilio->SendSMS($msg, $postData['phone']);
             $success = true;
-            return ['data' => $success];
+            return ['data' => $success,
+                    'ids' => $postData['ids'] ?? []];
         } catch (\Throwable $error) {
             Yii::$app->response->statusCode = 400;
             return [
