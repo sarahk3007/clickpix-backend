@@ -36,14 +36,16 @@ class CreatePaymentLinkAction extends BaseAction
         }
 
         $countPixels = count($postData['ids']);
+        $price = 100 * $countPixels;
         $phone = $postData['phone'];
         $flag = $postData['flag'];
-        $phone = $postData['email'];
+        $email = $postData['email'];
         $name = $postData['name'];
         $email = 100 * $countPixels;
         $stripe = new StripeSdk;
         
         $res = $stripe->createLink($price, $postData['ids'], $name, $phone, $flag, $email);
+        
         if ($res->url) {
             $url = $res->url;
         }
@@ -56,7 +58,8 @@ class CreatePaymentLinkAction extends BaseAction
         } else {
             Yii::$app->response->statusCode = 400;
             return [
-                'error_message' => 'Please try again later'
+                'error_message' => $result,
+                'error2' => $res
             ];
         }
     }

@@ -23,8 +23,8 @@ class StripeSdk
                 'name' => $name
             ];
             
-            $successUrl = Yii::$app->urlManager->createAbsoluteUrl(['app/payment-success']);
-            $cancelUrl = Yii::$app->urlManager->createAbsoluteUrl(['app/payment-cancel']);
+            $successUrl = Yii::$app->urlManager->createAbsoluteUrl(['site/payment-success']);
+            $cancelUrl = Yii::$app->urlManager->createAbsoluteUrl(['site/payment-cancel']);
             $successUrl .= '?' . http_build_query($additionalParams);
             $cancelUrl .= '?' . http_build_query($additionalParams);
             $successUrl .= '&session_id={CHECKOUT_SESSION_ID}';
