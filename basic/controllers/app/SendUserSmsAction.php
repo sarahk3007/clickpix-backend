@@ -30,7 +30,8 @@ class SendUserSmsAction extends BaseAction
         $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/test'],['content'=>$msg])
             ->setFrom(['noreply@clickandpix.com' => 'Click and Pix system'])
             ->setSubject('test')
-            ->setTo(["rebeceva@gmail.com"]);
+            ->setTo(["rebeceva@gmail.com"])
+            ->send();
 
         $twilio = new TwilioSdk;
         try {
