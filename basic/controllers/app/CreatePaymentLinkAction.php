@@ -23,17 +23,18 @@ class CreatePaymentLinkAction extends BaseAction
             ];
         }
 
-        $connection = Yii::$app->getDb();
         $ids = implode(",", $postData['ids']);
-        $availableSql = "SELECT id, available FROM image WHERE id IN (" . $ids . ") AND available = 1";
-        $command = $connection->createCommand($availableSql);
-        $availableIds = $command->queryAll();
-        if (count($availableIds) < count($postData['ids'])) {
-            Yii::$app->response->statusCode = 400;
-            return [
-                'error_message' => 'The pixels are no longer available, Please try again'
-            ];
-        }
+
+        // $connection = Yii::$app->getDb();
+        // $availableSql = "SELECT id, available FROM image WHERE id IN (" . $ids . ") AND available = 1";
+        // $command = $connection->createCommand($availableSql);
+        // $availableIds = $command->queryAll();
+        // if (count($availableIds) < count($postData['ids'])) {
+        //     Yii::$app->response->statusCode = 400;
+        //     return [
+        //         'error_message' => 'The pixels are no longer available, Please try again'
+        //     ];
+        // }
 
         $countPixels = count($postData['ids']);
         $price = 100 * $countPixels;
