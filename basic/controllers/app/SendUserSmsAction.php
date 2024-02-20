@@ -27,10 +27,10 @@ class SendUserSmsAction extends BaseAction
         $token = AccessToken::create(1, 'sms_token');
         $msg = 'Your Click&Pix verification code is: ' . $token;
         //TODO finish the email
-        // $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/test'],['content'=>$msg])
-        //     ->setFrom(['noreply@clickandpix.com' => 'Click and Pix system'])
-        //     ->setTo(["rebeceva@gmail.com"])
-        //     ->setSubject('test');
+        $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/test'],['content'=>$msg])
+            ->setFrom(['noreply@clickandpix.com' => 'Click and Pix system'])
+            ->setSubject('test')
+            ->setTo(["rebeceva@gmail.com"]);
 
         $twilio = new TwilioSdk;
         try {
