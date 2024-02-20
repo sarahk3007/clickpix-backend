@@ -3,7 +3,7 @@
         <h1 class="display-4">Congratulations!</h1>
 
         <p class="lead">You have successfully paid for your pixels. You can now close this window.</p>
-        <p><a class="btn btn-lg btn-success" href="https://clickandpix-u11765.vm.elestio.app?sessionId=" . $sessionId>Close</a></p>
+        <p><a class="btn btn-lg btn-success" href="https://clickandpix-u11765.vm.elestio.app?sessionId="<?=$sessionId?>>Close</a></p>
     </div>
 
     <div class="body-content">
