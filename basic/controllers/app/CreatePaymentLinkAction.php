@@ -23,9 +23,10 @@ class CreatePaymentLinkAction extends BaseAction
             ];
         }
 
+        $connection = Yii::$app->getDb();
+
         $ids = implode(",", $postData['ids']);
 
-        // $connection = Yii::$app->getDb();
         // $availableSql = "SELECT id, available FROM image WHERE id IN (" . $ids . ") AND available = 1";
         // $command = $connection->createCommand($availableSql);
         // $availableIds = $command->queryAll();
