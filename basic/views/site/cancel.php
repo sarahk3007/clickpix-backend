@@ -4,7 +4,7 @@
 
         <p class="lead">Something went wrong. Please try again.</p>
 
-        <p><a class="btn btn-lg btn-success" href="https://www.yiiframework.com">Close</a></p>
+        <p><a class="btn btn-lg btn-success" href="https://clickandpix-u11765.vm.elestio.app">Close</a></p>
     </div>
 
     <div class="body-content">

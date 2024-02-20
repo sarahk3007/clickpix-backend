@@ -58,7 +58,9 @@ class PaymentSuccessAction extends BaseAction
             }
 
             //TODO send email confirmation
-            return $this->controller->render('/site/success');
+            return $this->controller->render('/site/success', [
+                'sessionId' => $checkoutSessionId,
+            ]);
             
         } catch (\Stripe\Exception\ApiErrorException $e) {
             Yii::$app->session->setFlash('error', 'Error: ' . $e->getMessage());
