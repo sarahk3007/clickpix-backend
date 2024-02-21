@@ -110,7 +110,7 @@ class AccessToken extends \yii\db\ActiveRecord
      */
     public static function markAsUsed(string $token = null, $type): bool
     {
-        $where = ['type' => $type, 'issue_ip' => Yii::$app->request->userIP ?? gethostbyname(getHostName()), 'used' => NULL];
+        $where = ['type' => $type, 'issue_ip' => Yii::$app->request->userIP ?? gethostbyname(getHostName()), 'used' => 0];
         if ($token) {
             $where['token'] = $token;
         }
