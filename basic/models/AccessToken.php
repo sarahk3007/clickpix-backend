@@ -88,7 +88,7 @@ class AccessToken extends \yii\db\ActiveRecord
             'valid_until' => (new \DateTime())->setTimestamp(strtotime("+{$validHours} hours"))->format('Y-m-d H:i:s'),
             'token' => $token,
             'used' => 0,
-            'issue_ip' => Yii::$app->request->userIP ?? gethostbyname(getHostName()),
+            'issue_ip' => Yii::$app->request->userIP,
         ];
 
         if (!$model->save() && YII_DEBUG) {
@@ -110,7 +110,7 @@ class AccessToken extends \yii\db\ActiveRecord
      */
     public static function markAsUsed(string $token = null, $type): bool
     {
-        $where = ['type' => $type, 'issue_ip' => Yii::$app->request->userIP ?? gethostbyname(getHostName()), 'used' => 0];
+        $where = ['type' => $type, 'issue_ip' => Yii::$app->request->userIP, 'used' => 0];
         if ($token) {
             $where['token'] = $token;
         }
