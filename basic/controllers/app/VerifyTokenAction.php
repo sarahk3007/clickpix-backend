@@ -24,7 +24,7 @@ class VerifyTokenAction extends BaseAction
         $codeModel = AccessToken::validateToken($postData['code'], 'sms_token');
 
         if (!empty($codeModel)) {
-            $usedResponse = AccessToken::markAsUsed($postData['code']);
+            $usedResponse = AccessToken::markAsUsed($postData['code'], 'sms_token');
             if ($usedResponse) { 
                 $success = true;
             }

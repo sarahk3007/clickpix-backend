@@ -87,8 +87,8 @@ class AccessToken extends \yii\db\ActiveRecord
             'issued_date' => (new \DateTime())->format('Y-m-d H:i:s'),
             'valid_until' => (new \DateTime())->setTimestamp(strtotime("+{$validHours} hours"))->format('Y-m-d H:i:s'),
             'token' => $token,
-            'used' => $type == 'bearer_token' ? 1 : 0,
-            'issue_ip' => Yii::$app->request->userIP ?? getHostByName(getHostName()),
+            'used' => 0,
+            'issue_ip' => Yii::$app->request->userIP ?? gethostbyname(getHostName()),
         ];
 
         if (!$model->save() && YII_DEBUG) {
@@ -108,9 +108,13 @@ class AccessToken extends \yii\db\ActiveRecord
      * @param string $token
      * @return bool
      */
-    public static function markAsUsed(string $token): bool
+    public static function markAsUsed(string $token = null, $type): bool
     {
-        if ($model = static::findOne(['token' => $token, 'type' => 'sms_token'])) {
+        $where = ['type' => $type, 'issue_ip' => Yii::$app->request->userIP ?? gethostbyname(getHostName()), 'used' => NULL];
+        if ($token) {
+            $where['token'] = $token;
+        }
+        if ($model = static::findOne($where)) {
             $model->used = 1;
             $model->used_date = (new \DateTime())->format('Y-m-d H:i:s');
             $model->used_ip = Yii::$app->request->userIP;

@@ -28,7 +28,9 @@ class AppController extends BaseAppController
                     'send-user-sms' => ['POST'],
                     'verify-token' => ['POST'],
                     'create-payment-link' => ['POST'],
-                    'block-pixels' => ['POST']
+                    'block-pixels' => ['POST'],
+                    'release-pixels' => ['POST'],
+                    'expire-token' => ['POST']
                 ],
             ],
         ]);
@@ -47,6 +49,8 @@ class AppController extends BaseAppController
             'verify-token' => 'app\controllers\app\VerifyTokenAction',
             'create-payment-link' => 'app\controllers\app\CreatePaymentLinkAction',
             'block-pixels' => 'app\controllers\app\BlockPixelsAction',
+            'release-pixels' => 'app\controllers\app\ReleasePixelsAction',
+            'expire-token' => 'app\controllers\app\ExpireTokenAction',
         ];
     }
 }

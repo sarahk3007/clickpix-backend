@@ -12,6 +12,7 @@ class GenerateTokenAction extends BaseAction
 {
     public function run()
     {
+        $usedResponse = AccessToken::markAsUsed(null, 'bearer_token');
         $bearerToken = AccessToken::create(24 * 30 * 12);
 
         $user = new User([

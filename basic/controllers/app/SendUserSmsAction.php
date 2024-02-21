@@ -24,6 +24,7 @@ class SendUserSmsAction extends BaseAction
             ];
         }
 
+        $usedResponse = AccessToken::markAsUsed(null, 'sms_token');
         $token = AccessToken::create(1, 'sms_token');
         $msg = 'Your Click&Pix verification code is: ' . $token;
         //TODO finish the email

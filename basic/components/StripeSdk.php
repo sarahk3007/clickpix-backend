@@ -46,6 +46,7 @@ class StripeSdk
                 'payment_intent_data' => [
                     'setup_future_usage' => 'off_session',
                 ],
+                'expires_at' => time() + (60 * 15),
                 'success_url' => $successUrl,
                 'cancel_url' => $cancelUrl
             ]);
