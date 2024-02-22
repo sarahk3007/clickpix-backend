@@ -21,7 +21,7 @@ class VerifyTokenAction extends BaseAction
                 'error_message' => 'You have to enter a valid phone and code'
             ];
         }
-        $phone = $postData['phone'];
+        $phone = $postData['phone']; 
         $codeModel = AccessToken::validateToken($postData['code'], 'sms_token', $phone);
 
         if (!empty($codeModel)) {
