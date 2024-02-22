@@ -12,13 +12,6 @@ class ExpireTokenAction extends BaseAction
 {
     public function run()
     {
-        // $postData = $this->controller->requestData;
-        // // if (!isset($postData['token'])) {
-        // //     Yii::$app->response->statusCode = 400;
-        // //     return [
-        // //         'error_message' => 'You have to send the token'
-        // //     ];
-        // // }
         $headers = Yii::$app->request->headers;
         if ($headers->has('Authorization')) {
             $authHeader = $headers->get('Authorization');

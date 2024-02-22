@@ -30,7 +30,7 @@ class AppController extends BaseAppController
                     'create-payment-link' => ['POST'],
                     'block-pixels' => ['POST'],
                     'release-pixels' => ['POST'],
-                    'expire-token' => ['POST']
+                    'expire-token' => ['GET']
                 ],
             ],
         ]);
