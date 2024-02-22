@@ -1,4 +1,4 @@
-ExpireTokenAction<?php
+<?php
 
 namespace app\controllers\app;
 
@@ -12,18 +12,29 @@ class ExpireTokenAction extends BaseAction
 {
     public function run()
     {
-        $postData = $this->controller->requestData;
-        if (!isset($postData['token'])) {
-            Yii::$app->response->statusCode = 400;
-            return [
-                'error_message' => 'You have to send the token'
-            ];
-        }
-        $token = $postData['token'];
-        $usedResponse = AccessToken::markAsUsed($token, 'bearer_token');
+        // $postData = $this->controller->requestData;
+        // // if (!isset($postData['token'])) {
+        // //     Yii::$app->response->statusCode = 400;
+        // //     return [
+        // //         'error_message' => 'You have to send the token'
+        // //     ];
+        // // }
+        $headers = Yii::$app->request->headers;
+        if ($headers->has('Authorization')) {
+            $authHeader = $headers->get('Authorization');
+            if (preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
+                $bearerToken = $matches[1];
+                $usedResponse = AccessToken::markAsUsed($bearerToken, 'bearer_token');
 
+                return [
+                    'success' => $usedResponse
+                ];
+            }   
+        }
+
+        Yii::$app->response->statusCode = 400;
         return [
-            'success' => $usedResponse
+            'error_message' => 'You have to send the token'
         ];
     }
 }
