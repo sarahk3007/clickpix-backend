@@ -24,8 +24,8 @@ class SendUserSmsAction extends BaseAction
             ];
         }
 
-        $usedResponse = AccessToken::markAsUsed(null, 'sms_token');
-        $token = AccessToken::create(1, 'sms_token');
+        $usedResponse = AccessToken::markAsUsed(null, 'sms_token', $postData['phone']);
+        $token = AccessToken::create(1, 'sms_token', $postData['phone']);
         $msg = 'Your Click&Pix verification code is: ' . $token;
         //TODO finish the email
         // $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/test'],['content'=>$msg])
