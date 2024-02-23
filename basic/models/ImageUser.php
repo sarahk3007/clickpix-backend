@@ -9,7 +9,6 @@ use Yii;
  *
  * @property int $id
  * @property int|null $image_id
- * @property int|null $phone
  * @property int|null $flag
  * @property string|null $email
  * @property string|null $name
@@ -33,7 +32,7 @@ class ImageUser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['image_id', 'phone', 'flag', 'created'], 'integer'],
+            [['image_id', 'flag', 'created'], 'integer'],
             [['email'], 'string', 'max' => 100],
             [['name'], 'string', 'max' => 500],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::class, 'targetAttribute' => ['image_id' => 'id']],
@@ -48,7 +47,7 @@ class ImageUser extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'image_id' => 'Image ID',
-            'phone' => 'Phone',
+            'email' => 'Email',
             'flag' => 'Flag',
             'email' => 'Email',
             'name' => 'Name',

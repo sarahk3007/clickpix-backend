@@ -32,13 +32,12 @@ class PaymentSuccessAction extends BaseAction
             $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentIntentId);
             
             $ids = Yii::$app->request->get('ids');
-            $phone = Yii::$app->request->get('phone');
             $flag = Yii::$app->request->get('flag');
             $email = Yii::$app->request->get('email');
             $name = Yii::$app->request->get('name');
             $connection = Yii::$app->getDb();
             $dateTime = strtotime('now');
-            if (!$ids || !$phone || !$flag || !$email || !$name) {
+            if (!$ids || !$flag || !$email || !$name) {
                 throw new ForbiddenHttpException('You are not allowed to access this resource.');
             }
             $arrayIds = implode(",", $ids);
@@ -51,25 +50,25 @@ class PaymentSuccessAction extends BaseAction
             } else {
                 $error = 'Payment history not updated';
             }
-            $sql = "INSERT INTO image_user (image_id, phone, flag, email, name, created) VALUES ";
+            $sql = "INSERT INTO image_user (image_id, flag, email, name, created) VALUES ";
             foreach ($ids as $id) {
-                $sql .= "(" . $id . ", '" . $phone . "', ". $flag . ", '". $email . "', '". $name . "', ". $dateTime .")";
+                $sql .= "(" . $id . ", ". $flag . ", '". $email . "', '". $name . "', ". $dateTime .")";
                 $sql .= ",";
             }
             $sql = substr_replace($sql,";",-1);
             $command = $connection->createCommand($sql);
             $insertResult = $command->execute();
-            $idsArray = implode(",", $ids);
             if ($insertResult) {
-                $sql = "UPDATE `image` SET paid = false, available = 1, flag = " . $flag . " WHERE id IN (" . $idsArray . ")";
+                $sql = "UPDATE `image` SET paid = false, available = 1, flag = " . $flag . " WHERE id IN (" . $arrayIds . ")";
                 $connection = Yii::$app->getDb();
                 $command = $connection->createCommand($sql);
                 $updateResult = $command->execute();
+                //TODO email success
             }
-
-            //TODO send email confirmation
+            
             return $this->controller->render('/site/success', [
                 'sessionId' => $checkoutSessionId,
+                'ids' => $ids,
             ]);
             
         } catch (\Stripe\Exception\ApiErrorException $e) {

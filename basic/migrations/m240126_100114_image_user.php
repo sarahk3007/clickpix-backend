@@ -15,7 +15,7 @@ class m240126_100114_image_user extends Migration
         $this->createTable('image_user', [
             'id' => $this->primaryKey(),
             'image_id' => $this->integer(),
-            'phone' => $this->integer(10),
+            //'phone' => $this->integer(10),
             'flag' => $this->boolean(),
             'email' => $this->string(100),
             'name' => $this->string(500),

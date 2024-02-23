@@ -15,17 +15,17 @@ class VerifyTokenAction extends BaseAction
     {
         $success = false;
         $postData = $this->controller->requestData;
-        if (!isset($postData['phone']) || !isset($postData['code'])) {
+        if (!isset($postData['email']) || !isset($postData['code'])) {
             Yii::$app->response->statusCode = 400;
             return [
-                'error_message' => 'You have to enter a valid phone and code'
+                'error_message' => 'You have to enter a valid email and code'
             ];
         }
-        $phone = $postData['phone']; 
-        $codeModel = AccessToken::validateToken($postData['code'], 'sms_token', $phone);
+        $mail = $postData['email']; 
+        $codeModel = AccessToken::validateToken($postData['code'], 'sms_token', $mail);
 
         if (!empty($codeModel)) {
-            $usedResponse = AccessToken::markAsUsed($postData['code'], 'sms_token', $phone);
+            $usedResponse = AccessToken::markAsUsed($postData['code'], 'sms_token', $mail);
             if ($usedResponse) { 
                 $success = true;
             }

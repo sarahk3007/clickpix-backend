@@ -7,7 +7,7 @@ use yii\httpclient\Client;
 
 class StripeSdk
 {
-    public function createLink($price, $ids, $name, $phone, $flag, $email) 
+    public function createLink($price, $ids, $name, $flag, $email) 
     {
         $token = Yii::$app->params['stripe']['token'];
         $secretKey = Yii::$app->params['stripe']['secretKey'];
@@ -17,11 +17,16 @@ class StripeSdk
 
             $additionalParams = [
                 'ids' => $ids,
-                'phone' => $phone,
                 'flag' => $flag,
                 'email' => $email,
                 'name' => $name
             ];
+
+            if ($flag) {
+                $which = 'israelian';
+            } else {
+                $which = 'palestinian';
+            }
             
             $successUrl = Yii::$app->urlManager->createAbsoluteUrl(['site/payment-success']);
             $cancelUrl = Yii::$app->urlManager->createAbsoluteUrl(['site/payment-cancel']);
@@ -36,7 +41,7 @@ class StripeSdk
                     'price_data' => [
                         'currency' => 'usd',
                         'product_data' => [
-                            'name' => 'pixels',
+                            'name' => 'Your ' . $which . ' pixels',
                         ],
                         'unit_amount' => $price, // Amount in cents
                     ],

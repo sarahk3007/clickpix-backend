@@ -16,7 +16,7 @@ class CreatePaymentLinkAction extends BaseAction
     {
         $success = false;
         $postData = $this->controller->requestData;
-        if (!isset($postData['ids']) || (isset($postData['ids']) && !is_array($postData['ids'])) || !isset($postData['phone']) || !isset($postData['name']) || !isset($postData['flag']) || !isset($postData['email'])) {
+        if (!isset($postData['ids']) || (isset($postData['ids']) && !is_array($postData['ids'])) || !isset($postData['name']) || !isset($postData['flag']) || !isset($postData['email'])) {
             Yii::$app->response->statusCode = 400;
             return [
                 'error_message' => 'You have to enter all POST parameters'
@@ -26,22 +26,27 @@ class CreatePaymentLinkAction extends BaseAction
         $connection = Yii::$app->getDb();
 
         $ids = implode(",", $postData['ids']);
-
         $countPixels = count($postData['ids']);
-        $price = 100 * $countPixels;
-        $phone = $postData['phone'];
+        $rest = $countPixels % 10;
+        // if ($rest != 0) {
+        //     $miss = 10 - $rest;
+        //     Yii::$app->response->statusCode = 400;
+        //     return [
+        //         'error_message' => 'You need to choose ' . $miss . ' more pixels'
+        //     ];
+        // }
+        $price = 10 * $countPixels;
         $flag = $postData['flag'];
         $email = $postData['email'];
         $name = $postData['name'];
-        $email = 100 * $countPixels;
         $stripe = new StripeSdk;
 
         $sql = "UPDATE `image` SET paid = true WHERE id IN (" . $ids . ")";
         $command = $connection->createCommand($sql);
         $result = $command->execute();
-        $res = $stripe->createLink($price, $postData['ids'], $name, $phone, $flag, $email);
-    
-        if ($res->url) {
+        $res = $stripe->createLink($price, $postData['ids'], $name, $flag, $email);
+            
+        if ($res && $res->url) {
             $url = $res->url;
             $dateTime = strtotime('now');
             $insertSql = "INSERT INTO payment_history (ids, start_date, session_id) VALUES ('(" . $ids . ")', " . $dateTime . ", '" . $res->id . "')";

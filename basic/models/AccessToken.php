@@ -19,7 +19,7 @@ use app\models\users\Contacts;
  * @property string $used_ip
  * @property string $token
  * @property int $total_time
- * @property string $phone
+ * @property string $email
  */
 class AccessToken extends \yii\db\ActiveRecord
 {
@@ -39,7 +39,7 @@ class AccessToken extends \yii\db\ActiveRecord
         return [
             [['type', 'issued_date', 'issue_ip', 'valid_until', 'token'], 'required'],
             [['total_time'], 'integer'],
-            [['issued_date', 'valid_until', 'used_date', 'phone'], 'safe'],
+            [['issued_date', 'valid_until', 'used_date', 'email'], 'safe'],
             [['type'], 'string', 'max' => 60],
             [['issue_ip', 'used_ip'], 'ip'],
             [['token'], 'string', 'max' => 400],
@@ -63,7 +63,7 @@ class AccessToken extends \yii\db\ActiveRecord
             'used_ip' => Yii::t('access_token', 'Used Ip'),
             'token' => Yii::t('access_token', 'Token'),
             'total_time' => Yii::t('access_token', 'Total Time'),
-            'phone' => Yii::t('access_token', 'Phone'),
+            'email' => Yii::t('access_token', 'EMail'),
         ];
     }
 
@@ -75,7 +75,7 @@ class AccessToken extends \yii\db\ActiveRecord
      * @param int $validHours
      * @return string|FALSE
      */
-    public static function create(int $validHours = 72, $type = 'bearer_token', string $phone = null)
+    public static function create(int $validHours = 72, $type = 'bearer_token', string $email = null)
     {
         if ($type == 'bearer_token')
             $token = Yii::$app->getSecurity()->generateRandomString();
@@ -91,7 +91,7 @@ class AccessToken extends \yii\db\ActiveRecord
             'token' => $token,
             'used' => 0,
             'issue_ip' => Yii::$app->request->userIP,
-            'phone' => $phone
+            'email' => $email
         ];
 
         if (!$model->save() && YII_DEBUG) {
@@ -111,14 +111,14 @@ class AccessToken extends \yii\db\ActiveRecord
      * @param string $token
      * @return bool
      */
-    public static function markAsUsed(string $token = null, $type, string $phone = null): bool
+    public static function markAsUsed(string $token = null, $type, string $email = null): bool
     {
         $where = ['type' => $type, 'issue_ip' => Yii::$app->request->userIP, 'used' => 0];
         if ($token) {
             $where['token'] = $token;
         }
-        if ($phone) {
-            $where['phone'] = $phone;
+        if ($email) {
+            $where['email'] = $email;
         }
         if ($model = static::findOne($where)) {
             $model->used = 1;
@@ -137,7 +137,7 @@ class AccessToken extends \yii\db\ActiveRecord
      * @param string $type
      * @return bool
      */
-    public static function validateToken(string $token, string $type, string $phone = null): bool
+    public static function validateToken(string $token, string $type, string $email = null): bool
     {
         $success = false;
         
@@ -145,7 +145,7 @@ class AccessToken extends \yii\db\ActiveRecord
             if(time() > strtotime($model->valid_until)) {
                 Yii::error("Access token {$token} expired on {$model->valid_until}!");
             } else {
-                if ($model->phone == $phone)
+                if ($model->email == $email)
                     $success = true;
                 else 
                     $success = false;

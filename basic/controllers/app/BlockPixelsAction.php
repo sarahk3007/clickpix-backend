@@ -21,6 +21,16 @@ class BlockPixelsAction extends BaseAction
                 'error_message' => 'You have to enter an array of ids'
             ];
         }
+
+        $countPixels = count($postData['ids']);
+        $rest = $countPixels % 10;
+        if ($rest != 0) {
+            $miss = 10 - $rest;
+            Yii::$app->response->statusCode = 400;
+            return [
+                'error_message' => 'You need to choose ' . $miss . ' more pixels'
+            ];
+        }
         $ids = implode(",", $postData['ids']);
 
         $connection = Yii::$app->getDb();

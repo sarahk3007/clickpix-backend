@@ -17,29 +17,30 @@ class SendUserSmsAction extends BaseAction
     {
         $postData = $this->controller->requestData;
         $success = false;
-        if (!isset($postData['phone'])) {
+        if (!isset($postData['email'])) {
             Yii::$app->response->statusCode = 400;
             return [
-                'error_message' => 'You have to enter a valid phone'
+                'error_message' => 'You have to enter a valid email'
             ];
         }
+        $mail = $postData['email'];
 
-        $usedResponse = AccessToken::markAsUsed(null, 'sms_token', $postData['phone']);
-        $token = AccessToken::create(1, 'sms_token', $postData['phone']);
+        $usedResponse = AccessToken::markAsUsed(null, 'sms_token', $mail);
+        $token = AccessToken::create(1, 'sms_token', $mail);
         $msg = 'Your Click&Pix verification code is: ' . $token;
-        //TODO finish the email
-        // $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/test'],['content'=>$msg])
-        //     ->setFrom(['noreply@clickandpix.com' => 'Click and Pix system'])
-        //     ->setSubject('test')
-        //     ->setTo(["rebeceva@gmail.com"])
-        //     ->send();
-
-        $twilio = new TwilioSdk;
+        
         try {
-            $response = $twilio->SendSMS($msg, $postData['phone']);
+            //TODO design email verification
+            $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/test'],['content'=>$msg])
+                ->setFrom(['noreply@clickandpix.com' => 'Click and Pix system'])
+                ->setSubject('Your verification code to ClickAndPix Website')
+                ->setTo($mail)
+                ->send();
             $success = true;
-            return ['data' => $success,
-                    'ids' => $postData['ids'] ?? []];
+            return [
+                'data' => $success,
+                'ids' => $postData['ids'] ?? []
+            ];
         } catch (\Throwable $error) {
             Yii::$app->response->statusCode = 400;
             return [
