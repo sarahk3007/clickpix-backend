@@ -8,9 +8,7 @@
 namespace app\commands;
 
 use yii\console\Controller;
-use yii\console\ExitCode;
-use app\components\TwilioSdk;
-use app\components\StripeSdk;
+use Yii;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -29,8 +27,11 @@ class HelloController extends Controller
      */
     public function actionIndex()
     {
-        $twilio = new TwilioSdk;
-        $res = $twilio->SendSMS('hello', '+972547488988');
-        print_r($res);die;
+        $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/main'],['content'=>''])
+            ->setFrom(['noreply@clickandpix.com' => 'מערכת הזמנות ליסינג'])
+            ->setTo(["rebeceva@gmail.com"])//["jonny@mipo.co.il"]
+            ->setSubject('test');
+
+        print_r($message->send());die;
     }
 }
