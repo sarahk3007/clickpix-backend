@@ -64,11 +64,21 @@ class PaymentSuccessAction extends BaseAction
                 $command = $connection->createCommand($sql);
                 $updateResult = $command->execute();
                 //TODO email success
+                $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/success'],
+                    [
+                        'name' => $name,
+                        'date' => date('d/m/Y H:i', $dateTime),
+                        'flag' => $flag
+                    ])
+                    ->setFrom(['noreply@clickandpix.com' => 'Click and Pix system'])
+                    ->setSubject('ClickandPix Successful Payment')
+                    ->setTo($email)
+                    ->send();
             }
             
             return $this->controller->render('/site/success', [
                 'sessionId' => $checkoutSessionId,
-                'ids' => $ids,
+                'ids' => implode(",", $ids),
             ]);
             
         } catch (\Stripe\Exception\ApiErrorException $e) {

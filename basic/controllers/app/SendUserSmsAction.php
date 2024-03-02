@@ -31,7 +31,7 @@ class SendUserSmsAction extends BaseAction
         
         try {
             //TODO design email verification
-            $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/test'],['content'=>$msg])
+            $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/verification'],['content'=>$msg])
                 ->setFrom(['noreply@clickandpix.com' => 'Click and Pix system'])
                 ->setSubject('Your verification code to ClickAndPix Website')
                 ->setTo($mail)
