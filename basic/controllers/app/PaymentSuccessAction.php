@@ -37,7 +37,7 @@ class PaymentSuccessAction extends BaseAction
             $name = Yii::$app->request->get('name');
             $connection = Yii::$app->getDb();
             $dateTime = strtotime('now');
-            if (!$ids || !$flag || !$email || !$name) {
+            if (!$ids || !in_array($flag, [0,1]) || !$email || !$name) {
                 throw new ForbiddenHttpException('You are not allowed to access this resource.');
             }
             $arrayIds = implode(",", $ids);
