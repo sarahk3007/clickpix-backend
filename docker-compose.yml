@@ -2,6 +2,7 @@ version: "2"
 services:
   php:
     image: yiisoftware/yii2-php:8.3-fpm-nginx
+    restart: always
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./basic/:/app:delegated
