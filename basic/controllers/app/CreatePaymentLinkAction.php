@@ -44,12 +44,12 @@ class CreatePaymentLinkAction extends BaseAction
         $sql = "UPDATE `image` SET paid = true WHERE id IN (" . $ids . ")";
         $command = $connection->createCommand($sql);
         $result = $command->execute();
-        $res = $stripe->createLink($price, $postData['ids'], $name, $flag, $email);
+        $res = $stripe->createLink($price, $name, $flag, $email);
             
         if ($res && $res->url) {
             $url = $res->url;
             $dateTime = strtotime('now');
-            $insertSql = "INSERT INTO payment_history (ids, start_date, session_id) VALUES ('(" . $ids . ")', " . $dateTime . ", '" . $res->id . "')";
+            $insertSql = "INSERT INTO payment_history (ids, start_date, session_id) VALUES ('" . $ids . "', " . $dateTime . ", '" . $res->id . "')";
             $command = $connection->createCommand($insertSql);
             $insertResult = $command->execute();
             if ($insertResult) {

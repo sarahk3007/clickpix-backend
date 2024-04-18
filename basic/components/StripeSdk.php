@@ -7,7 +7,7 @@ use yii\httpclient\Client;
 
 class StripeSdk
 {
-    public function createLink($price, $ids, $name, $flag, $email) 
+    public function createLink($price, $name, $flag, $email) 
     {
         $token = Yii::$app->params['stripe']['token'];
         $secretKey = Yii::$app->params['stripe']['secretKey'];
@@ -16,7 +16,6 @@ class StripeSdk
         try {
 
             $additionalParams = [
-                'ids' => $ids,
                 'flag' => $flag,
                 'email' => $email,
                 'name' => $name

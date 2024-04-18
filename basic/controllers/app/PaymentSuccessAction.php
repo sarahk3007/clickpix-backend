@@ -31,18 +31,19 @@ class PaymentSuccessAction extends BaseAction
             $paymentIntentId = $session->payment_intent;
             $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentIntentId);
             
-            $ids = Yii::$app->request->get('ids');
+            //$ids = Yii::$app->request->get('ids');
             $flag = Yii::$app->request->get('flag');
             $email = Yii::$app->request->get('email');
             $name = Yii::$app->request->get('name');
             $connection = Yii::$app->getDb();
             $dateTime = strtotime('now');
-            if (!$ids || !in_array($flag, [0,1]) || !$email || !$name) {
+            if (!in_array($flag, [0,1]) || !$email || !$name) {
                 throw new ForbiddenHttpException('You are not allowed to access this resource.');
             }
-            $arrayIds = implode(",", $ids);
+            //$arrayIds = implode(",", $ids);
             $dateTime = strtotime('now');
-            $paymentSql = "UPDATE payment_history SET end_date = '" . $dateTime . "' WHERE end_date IS NULL AND ids = '(" . $arrayIds . ")' AND session_id = '" . $checkoutSessionId . "'";
+            //AND ids = '(" . $arrayIds . ")'
+            $paymentSql = "UPDATE payment_history SET end_date = '" . $dateTime . "' WHERE end_date IS NULL AND session_id = '" . $checkoutSessionId . "'";
             $command = $connection->createCommand($paymentSql);
             $payment = $command->execute();
             if ($payment && $payment > 0) {
@@ -50,30 +51,37 @@ class PaymentSuccessAction extends BaseAction
             } else {
                 $error = 'Payment history not updated';
             }
-            $sql = "INSERT INTO image_user (image_id, flag, email, name, created) VALUES ";
-            foreach ($ids as $id) {
-                $sql .= "(" . $id . ", ". $flag . ", '". $email . "', '". $name . "', ". $dateTime .")";
-                $sql .= ",";
-            }
-            $sql = substr_replace($sql,";",-1);
-            $command = $connection->createCommand($sql);
-            $insertResult = $command->execute();
-            if ($insertResult) {
-                $sql = "UPDATE `image` SET paid = false, available = 1, flag = " . $flag . " WHERE id IN (" . $arrayIds . ")";
-                $connection = Yii::$app->getDb();
+
+            $historySql = "SELECT * FROM payment_history WHERE session_id = '" . $checkoutSessionId . "'";
+            $historyCommand = $connection->createCommand($historySql);
+            $paymentHistories = $historyCommand->queryAll();
+            if (isset($paymentHistories[0]['session_id'])) {
+                $ids = explode(",", $paymentHistories[0]['ids']);
+                $sql = "INSERT INTO image_user (image_id, flag, email, name, created) VALUES ";
+                foreach ($ids as $id) {
+                    $sql .= "(" . $id . ", ". $flag . ", '". $email . "', '". $name . "', ". $dateTime .")";
+                    $sql .= ",";
+                }
+                $sql = substr_replace($sql,";",-1);
                 $command = $connection->createCommand($sql);
-                $updateResult = $command->execute();
-                //TODO email success
-                $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/success'],
-                    [
-                        'name' => $name,
-                        'date' => date('d/m/Y H:i', $dateTime),
-                        'flag' => $flag
-                    ])
-                    ->setFrom(['noreply@clickandpix.com' => 'Click and Pix system'])
-                    ->setSubject('ClickandPix Successful Payment')
-                    ->setTo($email)
-                    ->send();
+                $insertResult = $command->execute();
+                if ($insertResult) {
+                    $sql = "UPDATE `image` SET paid = false, available = 1, flag = " . $flag . " WHERE id IN (" . $arrayIds . ")";
+                    $connection = Yii::$app->getDb();
+                    $command = $connection->createCommand($sql);
+                    $updateResult = $command->execute();
+                    //TODO email success
+                    $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/success'],
+                        [
+                            'name' => $name,
+                            'date' => date('d/m/Y H:i', $dateTime),
+                            'flag' => $flag
+                        ])
+                        ->setFrom(['noreply@clickandpix.com' => 'Click and Pix system'])
+                        ->setSubject('ClickandPix Successful Payment')
+                        ->setTo($email)
+                        ->send();
+                }
             }
             
             return $this->controller->render('/site/success', [

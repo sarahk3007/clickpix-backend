@@ -20,13 +20,15 @@ class GetVisiblePixelsAction extends BaseAction
         
         $ids = array_column($result, 'id');
 
-        $notVisible = "SELECT id, available, flag FROM image WHERE available = 0 AND id NOT IN (" . implode(',', $ids) . ")";
-        $noVisibleCommand = $connection->createCommand($notVisible);
-        $notVisibleArray = $noVisibleCommand->queryAll();
+        if ($ids) {
+            $notVisible = "SELECT id, available, flag FROM image WHERE available = 0 AND id NOT IN (" . implode(',', $ids) . ")";
+            $noVisibleCommand = $connection->createCommand($notVisible);
+            $notVisibleArray = $noVisibleCommand->queryAll();
+        }
 
         return [
             'visiblePixels' => $result,
-            'notVisibleNotAvailable' => $notVisibleArray,
+            'notVisibleNotAvailable' => $notVisibleArray ?? [],
         ];
     }
 }
