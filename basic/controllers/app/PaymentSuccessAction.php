@@ -57,6 +57,7 @@ class PaymentSuccessAction extends BaseAction
             $paymentHistories = $historyCommand->queryAll();
             if (isset($paymentHistories[0]['session_id'])) {
                 $ids = explode(",", $paymentHistories[0]['ids']);
+                $arrayIds = implode(",", $ids);
                 $sql = "INSERT INTO image_user (image_id, flag, email, name, created) VALUES ";
                 foreach ($ids as $id) {
                     $sql .= "(" . $id . ", ". $flag . ", '". $email . "', '". $name . "', ". $dateTime .")";
