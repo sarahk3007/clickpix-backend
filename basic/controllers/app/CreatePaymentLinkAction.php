@@ -27,7 +27,7 @@ class CreatePaymentLinkAction extends BaseAction
 
         $ids = implode(",", $postData['ids']);
         $countPixels = count($postData['ids']);
-        $rest = $countPixels % 10;
+        // $rest = $countPixels % 10;
         // if ($rest != 0) {
         //     $miss = 10 - $rest;
         //     Yii::$app->response->statusCode = 400;

@@ -26,7 +26,7 @@ class GetRandomIdsAction extends BaseAction
         $command = $connection->createCommand($sql);
         $ids = $command->queryAll();
 
-        $consecutiveIds = $this->getConsecutiveIdsFromArray(array_column($ids, 'id'), $postData['num']);
+        $consecutiveIds = $this->getConsecutiveIdsFromArray(array_column($ids, 'id'), $postData['num'] / 10);
 
         return [
             'data' => $consecutiveIds
