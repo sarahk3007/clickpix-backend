@@ -35,7 +35,7 @@ class CreatePaymentLinkAction extends BaseAction
         //         'error_message' => 'You need to choose ' . $miss . ' more pixels'
         //     ];
         // }
-        $price = 10 * $countPixels;
+        $price = 100 * $countPixels;
         $flag = $postData['flag'];
         $email = $postData['email'];
         $name = $postData['name'];
