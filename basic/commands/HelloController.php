@@ -27,11 +27,28 @@ class HelloController extends Controller
      */
     public function actionIndex()
     {
-        $message = Yii::$app->mailer->compose(['html' => '@app/views/layouts/main'],['content'=>''])
-            ->setFrom(['noreply@clickandpix.com' => 'מערכת הזמנות ליסינג'])
-            ->setTo(["rebeceva@gmail.com"])//["jonny@mipo.co.il"]
-            ->setSubject('test');
+        ini_set('memory_limit','3G');
+        $connection = Yii::$app->getDb();
+        $sql = "INSERT INTO image_user (image_id, flag, email, name, created) VALUES ";
+        for ($id = 0; $id <= 100000; $id = $id + 600) {
+            if ($id == 0) {
+                $newId = 1;
+            }
+            $j = $newId;
+            for ($j = $newId + 1; $j <= $newId + 300; $j++) {
+                $dateTime = rand(1, 1706443563);
+                if ($j < 25000 || $j > 75000) {
+                    $flag = 0;
+                } else {
+                    $flag = 1;
+                }
+                $sql .= "(" . $j . ", 0547488988, ". $flag . ", 'rebeceva@gmail.com', 'rebecca test', ". $dateTime .")";
+                $sql .= ",";
+            }
+        }
 
-        print_r($message->send());die;
+        $sql = substr_replace($sql,";",-1);
+        $command = $connection->createCommand($sql);
+        $result = $command->execute();
     }
 }
