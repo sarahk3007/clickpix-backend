@@ -27,12 +27,21 @@ class GetRandomIdsAction extends BaseAction
         $command = $connection->createCommand($sql);
         $ids = $command->queryAll();
 
+        if ($postData['num'] / 10 > count($ids)) {
+            Yii::$app->response->statusCode = 400;
+            return [
+                'error_message' => 'There is not enough pixels left to buy'
+            ]; 
+        }
         $secondSql = "SELECT DISTINCT(image.id) FROM image LEFT JOIN image_user ON image.id = image_user.image_id WHERE image_user.image_id IS NOT NULL AND image.flag = " . $flag;
         $connection = Yii::$app->getDb();
         $secondCommand = $connection->createCommand($secondSql);
         $flagIds = $secondCommand->queryAll();
 
         $consecutiveIds = $this->findAdjacentSquare(array_column($ids, 'id'), array_column($flagIds, 'id'), $postData['num'] / 10);
+        if (empty($consecutiveIds)) {
+            $consecutiveIds = array_rand(array_column($ids, 'id'), $postData['num'] / 10);
+        }
 
         return [
             'data' => $consecutiveIds
