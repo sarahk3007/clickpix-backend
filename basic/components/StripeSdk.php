@@ -50,6 +50,7 @@ class StripeSdk
                 'payment_intent_data' => [
                     'setup_future_usage' => 'off_session',
                 ],
+                'consent_collection' => ['payment_method_reuse_agreement' => ['position' => 'hidden']],
                 'expires_at' => time() + (60 * 30),
                 'success_url' => $successUrl,
                 'cancel_url' => $cancelUrl
