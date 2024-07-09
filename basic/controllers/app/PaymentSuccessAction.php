@@ -60,6 +60,9 @@ class PaymentSuccessAction extends BaseAction
                 $arrayIds = implode(",", $ids);
                 $sql = "INSERT INTO image_user (image_id, flag, email, name, created) VALUES ";
                 foreach ($ids as $id) {
+                    if ($id === 0) {
+                        continue;
+                    }
                     $sql .= "(" . $id . ", ". $flag . ", '". $email . "', '". $name . "', ". $dateTime .")";
                     $sql .= ",";
                 }
